@@ -78,45 +78,44 @@ const PDFSearchResults: React.FC = () => {
   const handleThumbnailClick = (file: PDFFile) => {
     setSelectedPdf(file);
   };
-
+  
   return (
     <div className="container mx-auto p-8">
       <h1 className="text-3xl font-bold">Search Results for: &quot;{query}&quot;</h1>
       
-      {loading ? (
-        <p>Loading PDFs...</p>
-      ) : (
-        <Suspense fallback={<div>Loading...</div>}>
-          {filteredFiles.length === 0 ? (
-            <p className="text-neutral-500 text-lg mt-4">No results found.</p>
-          ) : selectedPdf ? (
-            <div>
-              <button onClick={() => setSelectedPdf(null)} className="mb-4 text-blue-700">
-                Back to Search Results
-              </button>
-              <iframe
-                src={selectedPdf.url}
-                width="100%"
-                height="700px"
-                style={{ border: 'none' }}
-              ></iframe>
-            </div>
-          ) : (
-            <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-4 mt-4">
-              {filteredFiles.map((file) => (
-                <div key={file.name} className="w-full flex items-center justify-center p-4">
-                  <img
-                    src={file.thumbnail}
-                    alt={`${file.name} thumbnail`}
-                    className="w-64 h-80 object-cover rounded-lg border-8 border-white cursor-pointer"
-                    onClick={() => handleThumbnailClick(file)}
-                  />
-                </div>
-              ))}
-            </div>
-          )}
-        </Suspense>
-      )}
+      <Suspense fallback={<div>Loading...</div>}>
+        {loading ? (
+          <p>Loading PDFs...</p>
+        ) : filteredFiles.length === 0 ? (
+          <p className="text-neutral-500 text-lg mt-4">No results found.</p>
+        ) : selectedPdf ? (
+          // Display the full PDF when a thumbnail is clicked
+          <div>
+            <button onClick={() => setSelectedPdf(null)} className="mb-4 text-blue-700">
+              Back to Search Results
+            </button>
+            <iframe
+              src={selectedPdf.url}
+              width="100%"
+              height="700px"
+              style={{ border: 'none' }}
+            ></iframe>
+          </div>
+        ) : (
+          <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-4 mt-4">
+            {filteredFiles.map((file) => (
+              <div key={file.name} className="w-full flex items-center justify-center p-4">
+                <img
+                  src={file.thumbnail}
+                  alt={`${file.name} thumbnail`}
+                  className="w-64 h-80 object-cover rounded-lg border-8 border-white cursor-pointer"
+                  onClick={() => handleThumbnailClick(file)}
+                />
+              </div>
+            ))}
+          </div>
+        )}
+      </Suspense>
     </div>
   );
 };
