@@ -1,7 +1,7 @@
 "use client";
 
 import { AnimatePresence, motion } from "framer-motion";
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useRef, useState, useCallback } from "react";
 import { cn } from "@/app/lib/utils";
 
 export function PlaceholdersAndInput({
@@ -24,14 +24,15 @@ export function PlaceholdersAndInput({
     }, 3000);
   };
 
-  const handleVisibilityChange = () => {
+  // Wrap handleVisibilityChange with useCallback to prevent unnecessary re-creations
+  const handleVisibilityChange = useCallback(() => {
     if (document.visibilityState !== "visible" && intervalRef.current) {
       clearInterval(intervalRef.current);
       intervalRef.current = null;
     } else if (document.visibilityState === "visible") {
       startAnimation();
     }
-  };
+  }, [startAnimation]);
 
   useEffect(() => {
     startAnimation();
@@ -43,7 +44,7 @@ export function PlaceholdersAndInput({
       }
       document.removeEventListener("visibilitychange", handleVisibilityChange);
     };
-  }, [placeholders]);
+  }, [placeholders, handleVisibilityChange, startAnimation]); // Include the necessary dependencies
 
   const inputRef = useRef<HTMLInputElement>(null);
 

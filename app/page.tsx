@@ -17,7 +17,6 @@ const audiowide = Audiowide({
 export default function Home() {
   const [search, setSearch] = useState("");
   const router = useRouter();
-  const [list, setList] = useState([]);
   const placeholders = [
     "Search all to see all the available books",
     "Read any digitally available book!",

@@ -84,7 +84,7 @@ const PDFSearchResults: React.FC = () => {
 
   return (
     <div className="container mx-auto p-8">
-      <h1 className="text-3xl font-bold">Search Results for: "{query}"</h1>
+      <h1 className="text-3xl font-bold">Search Results for: &quot;{query}&quot;</h1>
       {loading ? (
         <p>Loading PDFs...</p>
       ) : filteredFiles.length === 0 ? (
