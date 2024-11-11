@@ -18,13 +18,14 @@ export function PlaceholdersAndInput({
   const [currentPlaceholder, setCurrentPlaceholder] = useState(0);
   const intervalRef = useRef<NodeJS.Timeout | null>(null);
 
-  const startAnimation = () => {
+  // Memoize the startAnimation function to avoid unnecessary re-creations
+  const startAnimation = useCallback(() => {
     intervalRef.current = setInterval(() => {
       setCurrentPlaceholder((prev) => (prev + 1) % placeholders.length);
     }, 3000);
-  };
+  }, [placeholders.length]); // Depend on the length of placeholders
 
-  // Wrap handleVisibilityChange with useCallback to prevent unnecessary re-creations
+  // Memoize handleVisibilityChange to avoid unnecessary re-creations
   const handleVisibilityChange = useCallback(() => {
     if (document.visibilityState !== "visible" && intervalRef.current) {
       clearInterval(intervalRef.current);
@@ -44,7 +45,7 @@ export function PlaceholdersAndInput({
       }
       document.removeEventListener("visibilitychange", handleVisibilityChange);
     };
-  }, [placeholders, handleVisibilityChange, startAnimation]); // Include the necessary dependencies
+  }, [handleVisibilityChange]); // Only depend on handleVisibilityChange
 
   const inputRef = useRef<HTMLInputElement>(null);
 
